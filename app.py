@@ -8,7 +8,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 def get_images():
-    """Get path of all card images stored in directory"""
+    """Get path of all card images stored in directory ./card_images"""
     list_of_card_path = []
     # open directory and read the file name
     for file in os.listdir('./card_images'):
@@ -23,7 +23,8 @@ def get_response_image(image_path):
     byte_arr = io.BytesIO()
     pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
     encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
-    return encoded_img
+    # return description of card and encoded image
+    return image_path[14:len(image_path) - 4], encoded_img
 
 
 @app.route("/")
@@ -35,9 +36,10 @@ def temp():
 def index():
     # get path to all card images
     card_images = get_images()
-    encoded_images = []
+    encoded_images = {}
 
-    # encode and send as JSON
+    # encode all card images and send as JSON
     for image_path in card_images:
-        encoded_images.append(get_response_image(image_path))
+        image = get_response_image(image_path)
+        encoded_images[image[0]] = image[1]
     return jsonify({'cards': encoded_images})
