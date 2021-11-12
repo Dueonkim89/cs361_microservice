@@ -41,3 +41,15 @@ def index():
     for image_path in card_images:
         encoded_images.append(get_response_image(image_path))
     return jsonify({'cards': encoded_images})
+
+
+@app.route('/get_rules',methods=['GET'])
+def rules():
+    '''Provide game rules for Conquian'''
+    rules = {"pack": 'A standard pack of 52 cards with all the tens, nines and eights removed, leaving a total of 40 cards in the deck.',
+    "rank": 'The jack and seven are considered to be in sequence. The rank of an ace is low only so that the sequence A, 2, 3 can be formed, but not A, K, Q.', 
+    "objective": 'Each player tries to form matched sets consisting of groups of three or four of a kind, or sequences of three or more cards of the same suit.',
+    "deal": 'Each of the two players is dealt 10 cards. The remaining cards form the stock; no upcard is turned.',
+    "youtube": "https://www.youtube.com/watch?v=Vq00jSkm96I&ab_channel=GatherTogetherGames",
+    "score": "The game ends when a player has melded exactly 11 cards. Therefore, a player may have no card left in their hand but still continues to play because they need another melded card to go out. Each deal is a separate game, and if the stock is exhausted before either player has melded 11 cards, the next game counts double."}
+    return jsonify(rules)
